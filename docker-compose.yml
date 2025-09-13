@@ -8,11 +8,12 @@ services:
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo18@2024
       - POSTGRES_DB=postgres
+      - POSTGRES_MAX_CONNECTIONS: 30000 
     restart: always
     shm_size: '64gb'
     volumes:
       - odoo-db18-data:/var/lib/postgresql/data   # persistent volume
-      - ./postgresql:/var/lib/postgresql/data-host # optional bind mount for direct access
+      - ./postgresql:/var/lib/postgresql/data
 
   odoo18:
     image: odoo:latest
