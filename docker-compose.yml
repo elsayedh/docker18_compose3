@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 
 services:
   db:
@@ -11,7 +11,7 @@ services:
     restart: always
     shm_size: '64gb'
     volumes:
-      - /opt/odoo-one/db:/var/lib/postgresql/data   # bind mount directly to host folder
+      - odoo-db18-data:/var/lib/postgresql/data
 
   odoo18:
     image: odoo:latest
@@ -19,16 +19,22 @@ services:
     depends_on:
       - db
     ports:
-      - "11018:8069"     # Odoo web
-      - "21018:8072"     # live chat
+      - "11018:8069"
+      - "21018:8072"
     tty: true
     environment:
       HOST: db
       USER: odoo
       PASSWORD: "odoo18@2024"
     volumes:
-      - /opt/odoo-one/addons:/mnt/extra-addons    # host folder for custom addons
-      - /opt/odoo-one/etc:/etc/odoo              # odoo.conf, logs, etc.
-      - /opt/odoo-one/web:/var/lib/odoo          # filestore & sessions
+      - odoo18_addons:/mnt/extra-addons
+      - odoo18_conf:/etc/odoo
+      - odoo-web18-data:/var/lib/odoo
     restart: always
     shm_size: '16gb'
+
+volumes:
+  odoo-db18-data:
+  odoo-web18-data:
+  odoo18_addons:
+  odoo18_conf:
