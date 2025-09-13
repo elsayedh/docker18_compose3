@@ -11,7 +11,8 @@ services:
     restart: always
     shm_size: '64gb'
     volumes:
-      - /opt/odoo-one/db:/var/lib/postgresql/data   # bind mount directly to host folder
+      - odoo-db18-data:/var/lib/postgresql/data
+      # or: - ./postgresql:/var/lib/postgresql/data   # <-- choose ONE
 
   odoo18:
     image: odoo:latest
@@ -27,8 +28,12 @@ services:
       USER: odoo
       PASSWORD: "odoo18@2024"
     volumes:
-      - /opt/odoo-one/addons:/mnt/extra-addons    # host folder for custom addons
-      - /opt/odoo-one/etc:/etc/odoo              # odoo.conf, logs, etc.
-      - /opt/odoo-one/web:/var/lib/odoo          # filestore & sessions
+      - ./addons:/mnt/extra-addons     # custom addons
+      - ./etc:/etc/odoo                # odoo.conf, logs, etc.
+      - odoo-web18-data:/var/lib/odoo  # Odoo filestore & sessions
     restart: always
     shm_size: '16gb'
+
+volumes:
+  odoo-db18-data:
+  odoo-web18-data:
