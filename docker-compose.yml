@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   db:
     image: postgres:latest
@@ -7,10 +8,11 @@ services:
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo18@2024
       - POSTGRES_DB=postgres
-    restart: always             # run as a service
+    restart: always
     shm_size: '64gb'
     volumes:
-        - ./postgresql:/var/lib/postgresql/data
+      - odoo-db18-data:/var/lib/postgresql/data   # persistent volume
+      - ./postgresql:/var/lib/postgresql/data-host # optional bind mount for direct access
 
   odoo18:
     image: odoo:latest
@@ -27,10 +29,12 @@ services:
       - USER=odoo
       - PASSWORD=odoo18@2024
     volumes:
-      #- /etc/timezone:/etc/timezone:ro
-      #- /etc/localtime:/etc/localtime:ro
-      # - ./entrypoint.sh:/entrypoint.sh   # if you want to install additional Python packages, uncomment this line!
-      - ./addons:/mnt/extra-addons
-      - ./etc:/etc/odoo
-    restart: always             # run as a service
+      - odoo-web18-data:/var/lib/odoo        # persistent volume (filestore & sessions)
+      - ./addons:/mnt/extra-addons           # bind mount for local custom modules
+      - ./etc:/etc/odoo                      # bind mount for config/logs
+    restart: always
     shm_size: '16gb'
+
+volumes:
+  odoo-db18-data:
+  odoo-web18-data:
