@@ -12,7 +12,6 @@ services:
     shm_size: '64gb'
     volumes:
       - odoo-db18-data:/var/lib/postgresql/data   # persistent volume
-      - ./postgresql:/var/lib/postgresql/data
 
   odoo18:
     image: odoo:latest
